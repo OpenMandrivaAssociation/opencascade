@@ -49,6 +49,8 @@ services. For more information on the Company please visit www.opencascade.com
 %{_usrsrc}/%{name}/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/*
+%dir %{_docdir}/%{name}
+%{_docdir}/%{name}/*
 
 #-----------------------------------------------------------------------
 %package	-n %{libname}
@@ -103,6 +105,7 @@ services. For more information on the Company please visit www.opencascade.com
 
 %files		-n %{devname}
 %defattr(-,root,root)
+%{_libdir}/lib*.la
 %{_libdir}/lib*.so
 %dir %{_includedir}/%{name}
 %{_includedir}/%{name}/*

@@ -1,7 +1,6 @@
 %define major	0
 %define libname	%mklibname %{name} %{major}
-%define devname	%{name}-devel
-%define docname	%{name}-doc
+%define devname	%mklibname -d %{name}
 
 Name:		opencascade
 Group:		Sciences/Physics
@@ -18,6 +17,8 @@ BuildRequires:	X11-devel
 BuildRequires:	java-rpmbuild
 BuildRequires:	tcl-devel
 BuildRequires:	tk-devel
+
+Requires:	pdksh
 
 Patch0:		underlink.patch
 Patch1:		format.patch
@@ -83,7 +84,8 @@ services. For more information on the Company please visit www.opencascade.com
 %package	-n %{devname}
 Summary:	3D modeling & numerical simulation
 Group:		Development/Other
-Requires:	lib%{name} = %{version}-%{release}
+Requires:	%{libname} = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
 
 %description	-n %{devname}

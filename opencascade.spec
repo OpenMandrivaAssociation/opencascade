@@ -5,7 +5,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	6.3
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	3D modeling & numerical simulation
 License:	LGPL with differences
 URL:		http://www.opencascade.org/
@@ -15,16 +15,22 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	GL-devel
 BuildRequires:	X11-devel
 BuildRequires:	java-rpmbuild
+BuildRequires:	qt-devel
 BuildRequires:	tcl-devel
 BuildRequires:	tk-devel
 
 Requires:	pdksh
+Requires:	tcl
+Requires:	tix
+Requires:	tk
 
 Patch0:		underlink.patch
 Patch1:		format.patch
 Patch2:		tcl8.6.patch
 Patch3:		open.patch
 Patch4:		destdir.patch
+Patch5:		environ.patch
+Patch6:		for-user-test-build.patch
 
 %description
 Open CASCADE Technology is software development platform freely available
@@ -45,7 +51,6 @@ services. For more information on the Company please visit www.opencascade.com
 
 %files
 %defattr(-,root,root)
-%{_bindir}/*
 %dir %{_usrsrc}/%{name}
 %{_usrsrc}/%{name}/*
 %dir %{_datadir}/%{name}
@@ -121,6 +126,8 @@ services. For more information on the Company please visit www.opencascade.com
 %patch2 -p2
 %patch3 -p2
 %patch4 -p2
+%patch5 -p2
+%patch6 -p2
 autoreconf -ifs
 
 #-----------------------------------------------------------------------
@@ -147,3 +154,14 @@ find %{buildroot}%{_datadir}/%{name} -type f | xargs chmod -x
 find %{buildroot}%{_usrsrc}/%{name} -type f | xargs chmod -x
 chmod +x %{buildroot}%{_usrsrc}/%{name}/env_DRAW.sh
 chmod +x %{buildroot}%{_usrsrc}/%{name}/WOKsite/*.csh
+
+# adjust environment/directories to avoid (too much) script patching
+ln -sf %{_usrsrc}/%{name} %{buildroot}%{_datadir}/%{name}/src
+ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
+mkdir -p %{buildroot}%{_datadir}/%{name}/bin
+mv -f %{buildroot}%{_bindir}/* %{buildroot}%{_datadir}/%{name}/bin
+
+# install java
+#non functional, so, don't "force" install
+#mkdir -p %{buildroot}%{_usrsrc}/%{name}/jcas
+#install -m 644 src/jcas/* %{buildroot}%{_usrsrc}/%{name}/jcas

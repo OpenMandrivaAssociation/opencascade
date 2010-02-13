@@ -14,6 +14,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 BuildRequires:	GL-devel
 BuildRequires:	X11-devel
+BuildRequires:	bison flex
 BuildRequires:	java-rpmbuild
 BuildRequires:	qt-devel
 BuildRequires:	tcl-devel

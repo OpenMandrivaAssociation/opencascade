@@ -140,8 +140,8 @@ popd
 %build
 pushd ros
     %configure --with-java-include=/usr/lib/jvm/java-rpmbuild/include
+    %make
 popd
-%make
 
 #-----------------------------------------------------------------------
 %clean

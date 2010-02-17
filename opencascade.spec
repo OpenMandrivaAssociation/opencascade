@@ -16,7 +16,7 @@ BuildRequires:	GL-devel
 BuildRequires:	X11-devel
 BuildRequires:	bison flex
 BuildRequires:	java-rpmbuild
-BuildRequires:	qt-devel
+BuildRequires:	qt4-devel
 BuildRequires:	tcl-devel
 BuildRequires:	tk-devel
 
@@ -93,6 +93,9 @@ Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
+# Renamed from opencascade-devel to libopencascade-devel
+# (but only in cooker, not in any official distro)
+Obsoletes:	%{name}-devel < %{version}-%{release}
 
 %description	-n %{devname}
 Open CASCADE Technology is software development platform freely available
@@ -120,20 +123,24 @@ services. For more information on the Company please visit www.opencascade.com
 
 #-----------------------------------------------------------------------
 %prep
-%setup -q -n OpenCASCADE6.3.0/ros
+%setup -q -n OpenCASCADE6.3.0
 
-%patch0 -p2
-%patch1 -p2
-%patch2 -p2
-%patch3 -p2
-%patch4 -p2
-%patch5 -p2
-%patch6 -p2
-autoreconf -ifs
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+pushd ros
+    autoreconf -ifs
+popd
 
 #-----------------------------------------------------------------------
 %build
-%configure --with-java-include=/usr/lib/jvm/java-rpmbuild/include
+pusdh ros
+    %configure --with-java-include=/usr/lib/jvm/java-rpmbuild/include
+popd
 %make
 
 #-----------------------------------------------------------------------
@@ -142,27 +149,29 @@ rm -rf %{buildroot}
 
 #-----------------------------------------------------------------------
 %install
-%makeinstall_std
-find %{buildroot}%{_includedir}/%{name} -type f | xargs chmod -x
-mkdir -p %{buildroot}%{_datadir}/%{name}/data
-cp -f ../LICENSE  %{buildroot}%{_datadir}/%{name}
-cp -far ../data/{csfdb,iges,images,occ,step,stl,vrml} %{buildroot}%{_datadir}/%{name}/data
-cp -far ../samples %{buildroot}%{_datadir}/%{name}
-mkdir -p %{buildroot}%{_docdir}/%{name}
-cp -far ../doc/* %{buildroot}%{_docdir}/%{name}
-ln -sf %{_docdir}/%{name} %{buildroot}%{_datadir}/%{name}/doc
-find %{buildroot}%{_datadir}/%{name} -type f | xargs chmod -x
-find %{buildroot}%{_usrsrc}/%{name} -type f | xargs chmod -x
-chmod +x %{buildroot}%{_usrsrc}/%{name}/env_DRAW.sh
-chmod +x %{buildroot}%{_usrsrc}/%{name}/WOKsite/*.csh
+pushd ros
+    %makeinstall_std
+    find %{buildroot}%{_includedir}/%{name} -type f | xargs chmod -x
+    mkdir -p %{buildroot}%{_datadir}/%{name}/data
+    cp -f ../LICENSE  %{buildroot}%{_datadir}/%{name}
+    cp -far ../data/{csfdb,iges,images,occ,step,stl,vrml} %{buildroot}%{_datadir}/%{name}/data
+    cp -far ../samples %{buildroot}%{_datadir}/%{name}
+    mkdir -p %{buildroot}%{_docdir}/%{name}
+    cp -far ../doc/* %{buildroot}%{_docdir}/%{name}
+    ln -sf %{_docdir}/%{name} %{buildroot}%{_datadir}/%{name}/doc
+    find %{buildroot}%{_datadir}/%{name} -type f | xargs chmod -x
+    find %{buildroot}%{_usrsrc}/%{name} -type f | xargs chmod -x
+    chmod +x %{buildroot}%{_usrsrc}/%{name}/env_DRAW.sh
+    chmod +x %{buildroot}%{_usrsrc}/%{name}/WOKsite/*.csh
 
-# adjust environment/directories to avoid (too much) script patching
-ln -sf %{_usrsrc}/%{name} %{buildroot}%{_datadir}/%{name}/src
-ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
-mkdir -p %{buildroot}%{_datadir}/%{name}/bin
-mv -f %{buildroot}%{_bindir}/* %{buildroot}%{_datadir}/%{name}/bin
+    # adjust environment/directories to avoid (too much) script patching
+    ln -sf %{_usrsrc}/%{name} %{buildroot}%{_datadir}/%{name}/src
+    ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
+    mkdir -p %{buildroot}%{_datadir}/%{name}/bin
+    mv -f %{buildroot}%{_bindir}/* %{buildroot}%{_datadir}/%{name}/bin
 
-# install java
-#non functional, so, don't "force" install
-#mkdir -p %{buildroot}%{_usrsrc}/%{name}/jcas
-#install -m 644 src/jcas/* %{buildroot}%{_usrsrc}/%{name}/jcas
+    # install java
+    #non functional, so, don't "force" install
+    #mkdir -p %{buildroot}%{_usrsrc}/%{name}/jcas
+    #install -m 644 src/jcas/* %{buildroot}%{_usrsrc}/%{name}/jcas
+popd

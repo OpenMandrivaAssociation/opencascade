@@ -138,7 +138,7 @@ popd
 
 #-----------------------------------------------------------------------
 %build
-pusdh ros
+pushd ros
     %configure --with-java-include=/usr/lib/jvm/java-rpmbuild/include
 popd
 %make

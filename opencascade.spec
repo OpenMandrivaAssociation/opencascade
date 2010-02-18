@@ -5,7 +5,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	6.3
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	3D modeling & numerical simulation
 License:	LGPL with differences
 URL:		http://www.opencascade.org/
@@ -93,9 +93,6 @@ Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	lib%{name}-devel = %{version}-%{release}
-# Renamed from opencascade-devel to libopencascade-devel
-# (but only in cooker, not in any official distro)
-Obsoletes:	%{name}-devel < %{version}-%{release}
 
 %description	-n %{devname}
 Open CASCADE Technology is software development platform freely available

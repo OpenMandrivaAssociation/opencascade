@@ -5,7 +5,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	6.3
-Release:	%mkrel 3
+Release:	%mkrel 4
 Summary:	3D modeling & numerical simulation
 License:	LGPL with differences
 URL:		http://www.opencascade.org/
@@ -164,6 +164,8 @@ pushd ros
     # adjust environment/directories to avoid (too much) script patching
     ln -sf %{_usrsrc}/%{name} %{buildroot}%{_datadir}/%{name}/src
     ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
+    ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
+    ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
     mkdir -p %{buildroot}%{_datadir}/%{name}/bin
     mv -f %{buildroot}%{_bindir}/* %{buildroot}%{_datadir}/%{name}/bin
 

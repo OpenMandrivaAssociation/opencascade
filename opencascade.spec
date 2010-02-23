@@ -5,7 +5,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	6.3
-Release:	%mkrel 4
+Release:	%mkrel 5
 Summary:	3D modeling & numerical simulation
 License:	LGPL with differences
 URL:		http://www.opencascade.org/

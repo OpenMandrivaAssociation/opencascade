@@ -166,6 +166,7 @@ pushd ros
     ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
     ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
     ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
+    ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
     mkdir -p %{buildroot}%{_datadir}/%{name}/bin
     mv -f %{buildroot}%{_bindir}/* %{buildroot}%{_datadir}/%{name}/bin
 

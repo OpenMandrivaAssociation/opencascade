@@ -12,8 +12,6 @@ Summary:	3D modeling & numerical simulation
 License:	LGPL with differences
 URL:		https://github.com/tpaviot/oce
 Source0:	https://download.github.com/tpaviot-oce-OCE-%{version}-0-%{gittag}.tar.gz
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-
 BuildRequires:	mesagl-devel
 BuildRequires:	mesaglu-devel
 BuildRequires:	libxmu-devel
@@ -76,8 +74,8 @@ edition to heavy industry.
 %package	-n %{devname}
 Summary:	3D modeling & numerical simulation
 Group:		Development/Other
-Requires:	%{libname} = %{version}-%{release}
-Provides:	%{name}-devel = %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 
 %description	-n %{devname}
 Open CASCADE Technology is software development platform freely available

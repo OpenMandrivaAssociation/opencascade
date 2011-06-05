@@ -14,12 +14,14 @@ URL:		https://github.com/tpaviot/oce
 Source0:	https://download.github.com/tpaviot-oce-OCE-%{version}-0-%{gittag}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-BuildRequires:	GL-devel
-BuildRequires:	X11-devel
+BuildRequires:	mesagl-devel
+BuildRequires:	mesaglu-devel
+BuildRequires:	libxmu-devel
+BuildRequires:	libx11-devel
+BuildRequires:	freetype2-devel
 BuildRequires:	ftgl-devel
 BuildRequires:	bison flex
 BuildRequires:	cmake
-BuildRequires:	qt4-devel
 BuildRequires:	tcl-devel
 BuildRequires:	tk-devel
 
@@ -45,7 +47,8 @@ edition to heavy industry.
 
 %files
 %defattr(-,root,root)
-%{_datadir}/%{name}_
+%{_sysconfdir}/profile.d/*
+%{_datadir}/%{name}
 
 #-----------------------------------------------------------------------
 %package	-n %{libname}
@@ -93,6 +96,7 @@ edition to heavy industry.
 %defattr(-,root,root)
 %{_libdir}/lib*.so
 %{_includedir}/%{name}
+%{_datadir}/cmake/Modules/*.cmake
 
 #-----------------------------------------------------------------------
 %prep
@@ -107,7 +111,8 @@ edition to heavy industry.
 	-DOCE_INSTALL_INCLUDE_DIR=%{_includedir}/%{name} \
 	-DOCE_INSTALL_LIB_DIR=%{_libdir} \
 	-DOCE_INSTALL_DATA_DIR=%{_datadir}/%{name} \
-	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d
+	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d \
+	-DOCE_INSTALL_CMAKE_DATA_DIR=share/cmake/Modules
 %make
 
 #-----------------------------------------------------------------------

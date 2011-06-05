@@ -16,6 +16,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 BuildRequires:	GL-devel
 BuildRequires:	X11-devel
+BuildRequires:	ftgl-devel
 BuildRequires:	bison flex
 BuildRequires:	cmake
 BuildRequires:	qt4-devel
@@ -106,7 +107,7 @@ edition to heavy industry.
 	-DOCE_INSTALL_INCLUDE_DIR=%{_includedir}/%{name} \
 	-DOCE_INSTALL_LIB_DIR=%{_libdir} \
 	-DOCE_INSTALL_DATA_DIR=%{_datadir}/%{name} \
-	-DOCE_INSTALL_SCRIPT_DIR=%{sysconfdir}/profile.d
+	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d
 %make
 
 #-----------------------------------------------------------------------

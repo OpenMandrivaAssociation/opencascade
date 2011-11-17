@@ -1,17 +1,24 @@
-%define gittag	gbc55d69
+%define gittag	ga384024
 %define major	0
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
+# based on opencascade 6.5.1
+%define occtag	6.5.1
+
+# tpaviot-oce version 0.7.0
+%define ocegit	0.7.0
+
 Name:		opencascade
 Group:		Sciences/Physics
 Epoch:		0
-Version:	0.3.0
+Version:	%{occtag}.%{ocegit}
 Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPL with differences
 URL:		https://github.com/tpaviot/oce
-Source0:	https://download.github.com/tpaviot-oce-OCE-%{version}-0-%{gittag}.tar.gz
+# https://github.com/tpaviot/oce/tarball/OCE-0.7.0
+Source0:	tpaviot-oce-OCE-0.7.0-0-ga384024.tar.gz
 BuildRequires:	mesagl-devel
 BuildRequires:	mesaglu-devel
 BuildRequires:	libxmu-devel
@@ -27,8 +34,6 @@ Requires:	pdksh
 Requires:	tcl
 Requires:	tix
 Requires:	tk
-Patch0:		OCE-0.3.0-link.patch
-Patch1:		OCE-0.3.0-str.patch
 
 %description
 Open CASCADE Technology is software development platform freely available
@@ -98,9 +103,7 @@ edition to heavy industry.
 
 #-----------------------------------------------------------------------
 %prep
-%setup -qn tpaviot-oce-c74e688
-%patch0 -p0
-%patch1 -p0
+%setup -qn tpaviot-oce-a384024
 
 #-----------------------------------------------------------------------
 %build
@@ -111,6 +114,7 @@ edition to heavy industry.
 	-DOCE_INSTALL_DATA_DIR=%{_datadir}/%{name} \
 	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d \
 	-DOCE_INSTALL_CMAKE_DATA_DIR=share/cmake/Modules
+perl -pi -e 's|/usr//usr|/usr|;' build_inc/oce-config.h
 %make
 
 #-----------------------------------------------------------------------
@@ -119,4 +123,11 @@ rm -rf %{buildroot}
 
 #-----------------------------------------------------------------------
 %install
+perl -pi -e 's|/usr//usr|/usr|;' build/env.sh build/env.csh
 %makeinstall_std -C build
+
+# adjust environment/directories to avoid (too much) script patching
+ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
+ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
+ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
+ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux

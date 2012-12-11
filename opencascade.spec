@@ -131,3 +131,45 @@ ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
 ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
+
+
+%changelog
+* Thu Nov 17 2011 Paulo Andrade <pcpa@mandriva.com.br> 0:6.5.1.0.7.0-1
++ Revision: 731433
+- Update to newest release.
+
+  + Funda Wang <fwang@mandriva.org>
+    - fix requires on epoch
+    - update file list
+    - add more br
+    - turn to community edition
+
+* Tue Dec 07 2010 Oden Eriksson <oeriksson@mandriva.com> 6.3-7mdv2011.0
++ Revision: 613531
+- rebuild
+
+* Sat Mar 20 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-6mdv2010.1
++ Revision: 525364
++ rebuild (emptylog)
+
+* Tue Feb 23 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-5mdv2010.1
++ Revision: 510407
++ rebuild (emptylog)
+
+* Fri Feb 19 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-4mdv2010.1
++ Revision: 508427
++ rebuild (emptylog)
+
+* Thu Feb 18 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-3mdv2010.1
++ Revision: 507809
++ rebuild (emptylog)
+
+* Wed Feb 17 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-2mdv2010.1
++ Revision: 507303
++ rebuild (emptylog)
+
+* Thu Feb 11 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-1mdv2010.1
++ Revision: 504363
+- Import opencascade 6.3.
+- opencascade
+

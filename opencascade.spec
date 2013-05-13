@@ -21,8 +21,8 @@ URL:		https://github.com/tpaviot/oce
 Source0:	tpaviot-oce-OCE-0.7.0-0-ga384024.tar.gz
 BuildRequires:	mesagl-devel
 BuildRequires:	mesaglu-devel
-BuildRequires:	libxmu-devel
-BuildRequires:	libx11-devel
+BuildRequires:	pkgconfig(xmu)
+BuildRequires:	pkgconfig(x11)
 BuildRequires:	freetype2-devel
 BuildRequires:	ftgl-devel
 BuildRequires:	bison flex

@@ -13,7 +13,7 @@ Name:		opencascade
 Group:		Sciences/Physics
 Epoch:		0
 Version:	%{occtag}.%{ocegit}
-Release:	1
+Release:	2
 Summary:	3D modeling & numerical simulation
 License:	LGPL with differences
 URL:		https://github.com/tpaviot/oce

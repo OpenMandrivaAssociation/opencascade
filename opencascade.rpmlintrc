@@ -1,0 +1,2 @@
+addFilter("E: zero-length")
+addFilter("W: cross-directory-hard-link")

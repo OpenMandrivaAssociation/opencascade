@@ -19,6 +19,7 @@ License:	LGPL with differences
 Url:		https://github.com/tpaviot/oce
 # https://github.com/tpaviot/oce/tarball/OCE-0.7.0
 Source0:	tpaviot-oce-OCE-0.7.0-0-ga384024.tar.gz
+Source10:	%{name}.rpmlintrc
 BuildRequires:	bison
 BuildRequires:	cmake
 BuildRequires:	flex

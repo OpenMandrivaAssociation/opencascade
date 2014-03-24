@@ -1,35 +1,35 @@
-%define gittag	ga384024
-%define major	0
-%define libname	%mklibname %{name} %{major}
-%define devname	%mklibname -d %{name}
+%define gittag ga384024
+%define major 1
+# Should be split later
+%define libname %mklibname %{name} %{major}
+%define devname %mklibname %{name} -d
 
 # based on opencascade 6.5.1
-%define occtag	6.5.1
+%define occtag 6.5.1
 
 # tpaviot-oce version 0.7.0
-%define ocegit	0.7.0
+%define ocegit 0.7.0
 
+Summary:	3D modeling & numerical simulation
 Name:		opencascade
 Group:		Sciences/Physics
-Epoch:		0
 Version:	%{occtag}.%{ocegit}
-Release:	3
-Summary:	3D modeling & numerical simulation
+Release:	4
 License:	LGPL with differences
-URL:		https://github.com/tpaviot/oce
+Url:		https://github.com/tpaviot/oce
 # https://github.com/tpaviot/oce/tarball/OCE-0.7.0
 Source0:	tpaviot-oce-OCE-0.7.0-0-ga384024.tar.gz
-BuildRequires:	mesagl-devel
-BuildRequires:	mesaglu-devel
-BuildRequires:	pkgconfig(xmu)
-BuildRequires:	pkgconfig(x11)
-BuildRequires:	pkgconfig(freetype2)
-BuildRequires:	ftgl-devel
-BuildRequires:	bison flex
+BuildRequires:	bison
 BuildRequires:	cmake
+BuildRequires:	flex
 BuildRequires:	tcl-devel
-BuildRequires:	tk-devel
-
+BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(ftgl)
+BuildRequires:	pkgconfig(gl)
+BuildRequires:	pkgconfig(glu)
+BuildRequires:	pkgconfig(tk)
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xmu)
 Requires:	pdksh
 Requires:	tcl
 Requires:	tix
@@ -49,16 +49,17 @@ numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
 %files
-%defattr(-,root,root)
 %{_sysconfdir}/profile.d/*
 %{_datadir}/%{name}
 
-#-----------------------------------------------------------------------
-%package	-n %{libname}
+#----------------------------------------------------------------------------
+
+%package -n %{libname}
 Summary:	3D modeling & numerical simulation
 Group:		System/Libraries
+Conflicts:	%{_lib}opencascade0 < 6.5.1.0.7.0-3
 
-%description	-n %{libname}
+%description -n %{libname}
 Open CASCADE Technology is software development platform freely available
 in open source. It includes components for 3D surface and solid modeling,
 visualization, data exchange and rapid application development.
@@ -71,18 +72,18 @@ The Technology exists from the mid 1990-s and has already been used by
 numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
-%files		-n %{libname}
-%defattr(-,root,root)
-%{_libdir}/lib*.so.*
+%files -n %{libname}
+%{_libdir}/lib*.so.%{major}*
 
-#-----------------------------------------------------------------------
-%package	-n %{devname}
+#----------------------------------------------------------------------------
+
+%package -n %{devname}
 Summary:	3D modeling & numerical simulation
 Group:		Development/Other
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 
-%description	-n %{devname}
+%description -n %{devname}
 Open CASCADE Technology is software development platform freely available
 in open source. It includes components for 3D surface and solid modeling,
 visualization, data exchange and rapid application development.
@@ -95,19 +96,19 @@ The Technology exists from the mid 1990-s and has already been used by
 numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
-%files		-n %{devname}
-%defattr(-,root,root)
+%files -n %{devname}
 %{_libdir}/lib*.so
 %{_includedir}/%{name}
 %{_datadir}/cmake/Modules/*.cmake
 
-#-----------------------------------------------------------------------
+#----------------------------------------------------------------------------
 %prep
 %setup -qn tpaviot-oce-a384024
 
-#-----------------------------------------------------------------------
+
 %build
-%cmake -DCMAKE_VERBOSE_MAKEFILE=OFF \
+%cmake \
+	-DCMAKE_VERBOSE_MAKEFILE=OFF \
 	-DOCE_INSTALL_PREFIX=%{_prefix} \
 	-DOCE_INSTALL_INCLUDE_DIR=%{_includedir}/%{name} \
 	-DOCE_INSTALL_LIB_DIR=%{_libdir} \
@@ -117,11 +118,6 @@ edition to heavy industry.
 perl -pi -e 's|/usr//usr|/usr|;' build_inc/oce-config.h
 %make
 
-#-----------------------------------------------------------------------
-%clean
-rm -rf %{buildroot}
-
-#-----------------------------------------------------------------------
 %install
 perl -pi -e 's|/usr//usr|/usr|;' build/env.sh build/env.csh
 %makeinstall_std -C build
@@ -131,45 +127,4 @@ ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
 ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
-
-
-%changelog
-* Thu Nov 17 2011 Paulo Andrade <pcpa@mandriva.com.br> 0:6.5.1.0.7.0-1
-+ Revision: 731433
-- Update to newest release.
-
-  + Funda Wang <fwang@mandriva.org>
-    - fix requires on epoch
-    - update file list
-    - add more br
-    - turn to community edition
-
-* Tue Dec 07 2010 Oden Eriksson <oeriksson@mandriva.com> 6.3-7mdv2011.0
-+ Revision: 613531
-- rebuild
-
-* Sat Mar 20 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-6mdv2010.1
-+ Revision: 525364
-+ rebuild (emptylog)
-
-* Tue Feb 23 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-5mdv2010.1
-+ Revision: 510407
-+ rebuild (emptylog)
-
-* Fri Feb 19 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-4mdv2010.1
-+ Revision: 508427
-+ rebuild (emptylog)
-
-* Thu Feb 18 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-3mdv2010.1
-+ Revision: 507809
-+ rebuild (emptylog)
-
-* Wed Feb 17 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-2mdv2010.1
-+ Revision: 507303
-+ rebuild (emptylog)
-
-* Thu Feb 11 2010 Paulo Andrade <pcpa@mandriva.com.br> 6.3-1mdv2010.1
-+ Revision: 504363
-- Import opencascade 6.3.
-- opencascade
 

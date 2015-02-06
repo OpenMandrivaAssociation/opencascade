@@ -14,7 +14,7 @@ Summary:	3D modeling & numerical simulation
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	%{occtag}.%{ocegit}
-Release:	4
+Release:	5
 License:	LGPL with differences
 Url:		https://github.com/tpaviot/oce
 # https://github.com/tpaviot/oce/tarball/OCE-0.7.0

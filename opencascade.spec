@@ -1,36 +1,35 @@
-%define gittag ga384024
-%define major 1
-# Should be split later
-%define libname %mklibname %{name} %{major}
-%define devname %mklibname %{name} -d
+%define gittag	ga384024
 
-# based on opencascade 6.5.1
-%define occtag 6.5.1
+%define major	8
+%define libname	%mklibname %{name} %{major}
+%define devname	%mklibname -d %{name}
+
+# based on opencascade 6.5.4
+%define occtag	6.7.0
 
 # tpaviot-oce version 0.7.0
-%define ocegit 0.7.0
+%define ocegit	0.15
 
-Summary:	3D modeling & numerical simulation
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	%{occtag}.%{ocegit}
-Release:	5
-License:	LGPL with differences
-Url:		https://github.com/tpaviot/oce
-# https://github.com/tpaviot/oce/tarball/OCE-0.7.0
-Source0:	tpaviot-oce-OCE-0.7.0-0-ga384024.tar.gz
-Source10:	%{name}.rpmlintrc
-BuildRequires:	bison
-BuildRequires:	cmake
-BuildRequires:	flex
-BuildRequires:	tcl-devel
+Release:	1
+Summary:	3D modeling & numerical simulation
+License:	LGPLv2 with exceptions
+URL:		https://github.com/tpaviot/oce
+Source0:	https://github.com/tpaviot/oce/archive/OCE-%{ocegit}.tar.gz
+Patch3:		opencascade-6.7.0-0.15-mga-glintptr.patch
+BuildRequires:	mesa-common-devel
+BuildRequires:  glew-devel
+BuildRequires:  pkgconfig(glu)
+BuildRequires:	pkgconfig(xmuu)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(ftgl)
-BuildRequires:	pkgconfig(gl)
-BuildRequires:	pkgconfig(glu)
-BuildRequires:	pkgconfig(tk)
-BuildRequires:	pkgconfig(x11)
-BuildRequires:	pkgconfig(xmu)
+BuildRequires:	bison 
+BuildRequires:	flex
+BuildRequires:	cmake
+BuildRequires:	tcl-devel
+BuildRequires:	tk-devel
 Requires:	pdksh
 Requires:	tcl
 Requires:	tix
@@ -50,17 +49,15 @@ numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
 %files
-%{_sysconfdir}/profile.d/*
+%doc LICENSE_LGPL_21.txt OCCT_LGPL_EXCEPTION.txt
 %{_datadir}/%{name}
 
-#----------------------------------------------------------------------------
-
-%package -n %{libname}
+#-----------------------------------------------------------------------
+%package	-n %{libname}
 Summary:	3D modeling & numerical simulation
 Group:		System/Libraries
-Conflicts:	%{_lib}opencascade0 < 6.5.1.0.7.0-3
 
-%description -n %{libname}
+%description	-n %{libname}
 Open CASCADE Technology is software development platform freely available
 in open source. It includes components for 3D surface and solid modeling,
 visualization, data exchange and rapid application development.
@@ -73,18 +70,18 @@ The Technology exists from the mid 1990-s and has already been used by
 numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
-%files -n %{libname}
-%{_libdir}/lib*.so.%{major}*
+%files		-n %{libname}
+%{_libdir}/lib*.so.%{major}
+%{_libdir}/lib*.so.%{major}.*
 
-#----------------------------------------------------------------------------
-
-%package -n %{devname}
+#-----------------------------------------------------------------------
+%package	-n %{devname}
 Summary:	3D modeling & numerical simulation
 Group:		Development/Other
 Requires:	%{libname} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 
-%description -n %{devname}
+%description	-n %{devname}
 Open CASCADE Technology is software development platform freely available
 in open source. It includes components for 3D surface and solid modeling,
 visualization, data exchange and rapid application development.
@@ -97,19 +94,19 @@ The Technology exists from the mid 1990-s and has already been used by
 numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
-%files -n %{devname}
+%files		-n %{devname}
 %{_libdir}/lib*.so
 %{_includedir}/%{name}
 %{_datadir}/cmake/Modules/*.cmake
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 %prep
-%setup -qn tpaviot-oce-a384024
+%setup -qn oce-OCE-%{ocegit}
+%apply_patches
 
-
+#-----------------------------------------------------------------------
 %build
-%cmake \
-	-DCMAKE_VERBOSE_MAKEFILE=OFF \
+%cmake -DCMAKE_VERBOSE_MAKEFILE=OFF \
 	-DOCE_INSTALL_PREFIX=%{_prefix} \
 	-DOCE_INSTALL_INCLUDE_DIR=%{_includedir}/%{name} \
 	-DOCE_INSTALL_LIB_DIR=%{_libdir} \
@@ -119,6 +116,9 @@ edition to heavy industry.
 perl -pi -e 's|/usr//usr|/usr|;' build_inc/oce-config.h
 %make
 
+
+
+#-----------------------------------------------------------------------
 %install
 perl -pi -e 's|/usr//usr|/usr|;' build/env.sh build/env.csh
 %makeinstall_std -C build
@@ -128,4 +128,3 @@ ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
 ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
-

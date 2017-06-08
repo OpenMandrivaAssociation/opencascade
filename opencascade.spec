@@ -1,12 +1,12 @@
-%define major	10
+%define major	11
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
 # based on opencascade 6.8.0
-%define occtag	6.8.0
+%define occtag	6.9.1
 
 # tpaviot-oce version 0.7.0
-%define ocegit	0.17.2
+%define ocegit	0.18.1
 
 Name:		opencascade
 Group:		Sciences/Physics
@@ -22,7 +22,7 @@ BuildRequires:  pkgconfig(glu)
 BuildRequires:	pkgconfig(xmuu)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(ftgl)
-BuildRequires:	bison 
+BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	cmake
 BuildRequires:	tcl-devel

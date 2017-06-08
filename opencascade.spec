@@ -1,12 +1,12 @@
-%define major	10
+%define major	11
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
-# based on opencascade 6.5.4
-%define occtag	6.7.9
+# based on opencascade 6.8.0
+%define occtag	6.9.1
 
 # tpaviot-oce version 0.7.0
-%define ocegit	0.17.2
+%define ocegit	0.18.1
 
 Name:		opencascade
 Group:		Sciences/Physics
@@ -16,14 +16,13 @@ Summary:	3D modeling & numerical simulation
 License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce
 Source0:	https://github.com/tpaviot/oce/archive/OCE-%{ocegit}.tar.gz
-#Patch3:		opencascade-6.7.0-0.15-mga-glintptr.patch
 BuildRequires:	mesa-common-devel
 BuildRequires:  glew-devel
 BuildRequires:  pkgconfig(glu)
 BuildRequires:	pkgconfig(xmuu)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(ftgl)
-BuildRequires:	bison 
+BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	cmake
 BuildRequires:	tcl-devel

@@ -11,7 +11,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	%{occtag}.%{ocegit}
-Release:	1
+Release:	2
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce
@@ -53,6 +53,7 @@ edition to heavy industry.
 %package	-n %{libname}
 Summary:	3D modeling & numerical simulation
 Group:		System/Libraries
+Obsoletes:	%{libname} < %{EVRD}
 
 %description	-n %{libname}
 Open CASCADE Technology is software development platform freely available

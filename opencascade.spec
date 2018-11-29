@@ -95,7 +95,7 @@ edition to heavy industry.
 %files		-n %{devname}
 %{_libdir}/lib*.so
 %{_includedir}/%{name}
-%{_datadir}/cmake/Modules/*.cmake
+%{_libdir}/oce-0.18
 
 #-----------------------------------------------------------------------
 %prep
@@ -109,8 +109,7 @@ edition to heavy industry.
 	-DOCE_INSTALL_INCLUDE_DIR=%{_includedir}/%{name} \
 	-DOCE_INSTALL_LIB_DIR=%{_libdir} \
 	-DOCE_INSTALL_DATA_DIR=%{_datadir}/%{name} \
-	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d \
-	-DOCE_INSTALL_CMAKE_DATA_DIR=share/cmake/Modules
+	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d
 perl -pi -e 's|/usr//usr|/usr|;' build_inc/oce-config.h
 %make
 

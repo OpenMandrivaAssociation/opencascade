@@ -6,7 +6,7 @@
 %define occtag	6.9.1
 
 # tpaviot-oce version 0.7.0
-%define ocegit	0.18.1
+%define ocegit	0.18.3
 
 Name:		opencascade
 Group:		Sciences/Physics

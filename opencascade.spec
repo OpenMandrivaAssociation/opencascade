@@ -1,32 +1,46 @@
-%define major	11
+%define major	7
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
 # based on opencascade 6.8.0
-%define occtag	6.9.1
-
-# tpaviot-oce version 0.7.0
-%define ocegit	0.18.3
+%define version 7.5.0
+%define occtag %(echo %version | tr . _)
 
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	%{occtag}.%{ocegit}
-Release:	2
+Version:	%{version}
+Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce
-Source0:	https://github.com/tpaviot/oce/archive/OCE-%{ocegit}.tar.gz
+Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{version}.tar.gz
+Patch1:		opencascade-fix_externlib.patch
+BuildRequires:	cmake
+BuildRequires:	doxygen
+BuildRequires: 	ninja
+BuildRequires:	bison
+BuildRequires:  cmake(Qt5)
+BuildRequires:  cmake(Qt5Core)
+BuildRequires:  cmake(Qt5Widgets)
+BuildRequires:  cmake(Qt5Quick)
+BuildRequires:  cmake(Qt5Xml)
+BuildRequires:  cmake(Qt5Sql)
+BuildRequires:  cmake(vtk)
+BuildRequires:	flex
+BuildRequires:	hdf5-devel
 BuildRequires:	mesa-common-devel
-BuildRequires:  glew-devel
-BuildRequires:  pkgconfig(glu)
+BuildRequires:	pkgconfig(gl)
+BuildRequires:	pkgconfig(glu)
+BuildRequires:	pkgconfig(glew)
+BuildRequires:	pkgconfig(xmu)
 BuildRequires:	pkgconfig(xmuu)
 BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(ftgl)
-BuildRequires:	bison
-BuildRequires:	flex
-BuildRequires:	cmake
-BuildRequires:	tcl-devel
-BuildRequires:	tk-devel
+BuildRequires:	pkgconfig(tcl)
+BuildRequires:	pkgconfig(tk)
+BuildRequires:  pkgconfig(tbb)
+BuildRequires:  pkgconfig(xi)
+
 Requires:	pdksh
 Requires:	tcl
 Requires:	tix
@@ -48,8 +62,11 @@ edition to heavy industry.
 %files
 %doc LICENSE_LGPL_21.txt OCCT_LGPL_EXCEPTION.txt
 %{_datadir}/%{name}
+#%{_bindir}/*.sh
+#%{_bindir}/DRAW*
 
 #-----------------------------------------------------------------------
+
 %package	-n %{libname}
 Summary:	3D modeling & numerical simulation
 Group:		System/Libraries
@@ -73,6 +90,7 @@ edition to heavy industry.
 %{_libdir}/lib*.so.%{major}.*
 
 #-----------------------------------------------------------------------
+
 %package	-n %{devname}
 Summary:	3D modeling & numerical simulation
 Group:		Development/Other
@@ -93,35 +111,41 @@ numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
 %files		-n %{devname}
-%{_libdir}/lib*.so
 %{_includedir}/%{name}
-%{_libdir}/oce-0.18
+%{_libdir}/lib*.so
+%{_libdir}/cmake/%{name}
 
 #-----------------------------------------------------------------------
+
 %prep
-%setup -qn oce-OCE-%{ocegit}
-%autopatch -p1
+%autosetup -p1 -n oce-upstream-V%{occtag}
 
-#-----------------------------------------------------------------------
 %build
-%cmake -DCMAKE_VERBOSE_MAKEFILE=OFF \
+export DESTDIR="%{buildroot}"
+%cmake \
+	-DCMAKE_VERBOSE_MAKEFILE=OFF \
 	-DOCE_INSTALL_PREFIX=%{_prefix} \
 	-DOCE_INSTALL_INCLUDE_DIR=%{_includedir}/%{name} \
 	-DOCE_INSTALL_LIB_DIR=%{_libdir} \
 	-DOCE_INSTALL_DATA_DIR=%{_datadir}/%{name} \
-	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d
-perl -pi -e 's|/usr//usr|/usr|;' build_inc/oce-config.h
-%make
+	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d \
+	-DUSE_TBB:BOOL=ON \
+	-DUSE_VTK:BOOL=ON \
+	-DINSTALL_VTK:BOOL=False \
+	-D3RDPARTY_VTK_LIBRARY_DIR:PATH=%{_libdir} \
+	-D3RDPARTY_VTK_INCLUDE_DIR:PATH=%{_includedir} \
+	-D3RDPARTY_VTK_INCLUDE_DIR=%{_includedir}/vtk \
+	-DINSTALL_DIR_LIB=%{_lib} \
+	-DINSTALL_DIR_CMAKE=%{_lib}/cmake/%{name} \
+	-G Ninja
+%ninja_build
 
-
-
-#-----------------------------------------------------------------------
 %install
-perl -pi -e 's|/usr//usr|/usr|;' build/env.sh build/env.csh
-%makeinstall_std -C build
+%ninja_install -C build
 
 # adjust environment/directories to avoid (too much) script patching
 ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
 ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
+

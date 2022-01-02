@@ -17,7 +17,7 @@ Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{ve
 Patch1:		opencascade-fix_externlib.patch
 BuildRequires:	cmake
 BuildRequires:	doxygen
-#BuildRequires: 	ninja
+BuildRequires: 	ninja
 BuildRequires:	bison
 BuildRequires:  cmake(Qt5)
 BuildRequires:  cmake(Qt5Core)
@@ -122,13 +122,10 @@ edition to heavy industry.
 
 %build
 export DESTDIR="%{buildroot}"
+export CC=gcc
+export CXX=g++
 %cmake \
 	-DCMAKE_VERBOSE_MAKEFILE=OFF \
-	-DOCE_INSTALL_PREFIX=%{_prefix} \
-	-DOCE_INSTALL_INCLUDE_DIR=%{_includedir}/%{name} \
-	-DOCE_INSTALL_LIB_DIR=%{_libdir} \
-	-DOCE_INSTALL_DATA_DIR=%{_datadir}/%{name} \
-	-DOCE_INSTALL_SCRIPT_DIR=%{_sysconfdir}/profile.d \
 	-DUSE_TBB:BOOL=ON \
 	-DUSE_VTK:BOOL=ON \
 	-DINSTALL_VTK:BOOL=False \
@@ -137,11 +134,11 @@ export DESTDIR="%{buildroot}"
 	-D3RDPARTY_VTK_INCLUDE_DIR=%{_includedir}/vtk \
 	-DINSTALL_DIR_LIB=%{_lib} \
 	-DINSTALL_DIR_CMAKE=%{_lib}/cmake/%{name} \
-	%{nil}
-%make_build -j1
+	-G Ninja
+%ninja_build
 
 %install
-%make_install -C build
+%ninja_install -C build
 
 # adjust environment/directories to avoid (too much) script patching
 ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib

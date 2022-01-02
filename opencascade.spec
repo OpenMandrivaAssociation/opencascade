@@ -17,7 +17,7 @@ Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{ve
 Patch1:		opencascade-fix_externlib.patch
 BuildRequires:	cmake
 BuildRequires:	doxygen
-BuildRequires: 	ninja
+#BuildRequires: 	ninja
 BuildRequires:	bison
 BuildRequires:  cmake(Qt5)
 BuildRequires:  cmake(Qt5Core)
@@ -137,11 +137,11 @@ export DESTDIR="%{buildroot}"
 	-D3RDPARTY_VTK_INCLUDE_DIR=%{_includedir}/vtk \
 	-DINSTALL_DIR_LIB=%{_lib} \
 	-DINSTALL_DIR_CMAKE=%{_lib}/cmake/%{name} \
-	-G Ninja
-%ninja_build
+	%{nil}
+%make_build -j1
 
 %install
-%ninja_install -C build
+%make_install -C build
 
 # adjust environment/directories to avoid (too much) script patching
 ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib

@@ -122,8 +122,6 @@ edition to heavy industry.
 
 %build
 export DESTDIR="%{buildroot}"
-export CC=gcc
-export CXX=g++
 %cmake \
 	-DCMAKE_VERBOSE_MAKEFILE=OFF \
 	-DUSE_TBB:BOOL=ON \

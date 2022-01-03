@@ -125,7 +125,7 @@ edition to heavy industry.
 export DESTDIR="%{buildroot}"
 %cmake \
 	-DCMAKE_VERBOSE_MAKEFILE=OFF \
-	-DUSE_TBB:BOOL=ON \
+	-DUSE_TBB:BOOL=OFF \
 	-DUSE_VTK:BOOL=ON \
 	-DINSTALL_VTK:BOOL=False \
 	-D3RDPARTY_VTK_LIBRARY_DIR:PATH=%{_libdir} \

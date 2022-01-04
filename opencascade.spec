@@ -2,8 +2,16 @@
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
-%define version 7.5.0
+%define version 7.6.0
 %define occtag %(echo %version | tr . _)
+
+# Enabe this in order to use git snapshiot
+%define _from_git 0
+
+%if %_from_git
+%define commit	80ffc5f84dae96de6ed093d3e5d2466a9e368b27
+%define shortcommit	%(c=%{commit}; echo ${c:0:7})
+%endif
 
 Name:		opencascade
 Group:		Sciences/Physics
@@ -12,7 +20,14 @@ Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce
+%if %_from_git
+# Source cannot be downloaded directly from git so download from from an address like the following:
+# https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit};sf=tgz
+# then rename as %{name}-%{version}.tgz
+Source0:	%{name}-%{version}.tgz
+%else
 Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{version}.tar.gz
+%endif
 Patch1:		opencascade-fix_externlib.patch
 Patch2:		opencascade-compile.patch
 # (upstream)
@@ -121,7 +136,11 @@ edition to heavy industry.
 #-----------------------------------------------------------------------
 
 %prep
+%if %_from_git
+%autosetup -p1 -n occt-%{shortcommit}
+%else
 %autosetup -p1 -n oce-upstream-V%{occtag}
+%endif
 
 %build
 export DESTDIR="%{buildroot}"

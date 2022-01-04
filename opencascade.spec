@@ -2,7 +2,6 @@
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
-# based on opencascade 6.8.0
 %define version 7.5.0
 %define occtag %(echo %version | tr . _)
 
@@ -16,6 +15,8 @@ URL:		https://github.com/tpaviot/oce
 Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{version}.tar.gz
 Patch1:		opencascade-fix_externlib.patch
 Patch2:		opencascade-compile.patch
+# (upstream)
+Patch100:	opencascade-7.5.0-fix_tbb.patch
 BuildRequires:	cmake
 BuildRequires:	doxygen
 BuildRequires: 	ninja
@@ -129,7 +130,7 @@ export CC=gcc
 export CXX=g++
 %cmake \
 	-DCMAKE_VERBOSE_MAKEFILE=OFF \
-	-DUSE_TBB:BOOL=OFF \
+	-DUSE_TBB:BOOL=ON \
 	-DUSE_VTK:BOOL=ON \
 	-DINSTALL_VTK:BOOL=False \
 	-D3RDPARTY_VTK_LIBRARY_DIR:PATH=%{_libdir} \
@@ -149,3 +150,4 @@ ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
 ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
+

@@ -15,6 +15,7 @@ License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce
 Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{version}.tar.gz
 Patch1:		opencascade-fix_externlib.patch
+Patch2:		opencascade-compile.patch
 BuildRequires:	cmake
 BuildRequires:	doxygen
 BuildRequires: 	ninja
@@ -63,8 +64,8 @@ edition to heavy industry.
 %files
 %doc LICENSE_LGPL_21.txt OCCT_LGPL_EXCEPTION.txt
 %{_datadir}/%{name}
-#%{_bindir}/*.sh
-#%{_bindir}/DRAW*
+%{_bindir}/*.sh
+%{_bindir}/DRAW*
 
 #-----------------------------------------------------------------------
 
@@ -123,25 +124,28 @@ edition to heavy industry.
 
 %build
 export DESTDIR="%{buildroot}"
+# FIXME as of 7.5.0, clang 13.0.0, fails to build with clang
+export CC=gcc
+export CXX=g++
 %cmake \
 	-DCMAKE_VERBOSE_MAKEFILE=OFF \
-	-DUSE_TBB:BOOL=ON \
+	-DUSE_TBB:BOOL=OFF \
 	-DUSE_VTK:BOOL=ON \
 	-DINSTALL_VTK:BOOL=False \
 	-D3RDPARTY_VTK_LIBRARY_DIR:PATH=%{_libdir} \
 	-D3RDPARTY_VTK_INCLUDE_DIR:PATH=%{_includedir} \
 	-D3RDPARTY_VTK_INCLUDE_DIR=%{_includedir}/vtk \
+	-DINSTALL_DIR=%{buildroot}%{_prefix} \
 	-DINSTALL_DIR_LIB=%{_lib} \
 	-DINSTALL_DIR_CMAKE=%{_lib}/cmake/%{name} \
 	-G Ninja
 %ninja_build
 
 %install
-%ninja_install -C build
+ninja install -C build
 
 # adjust environment/directories to avoid (too much) script patching
 ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
 ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
 ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
-

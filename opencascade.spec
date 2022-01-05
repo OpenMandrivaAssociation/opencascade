@@ -2,7 +2,7 @@
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
-%define version 7.6.0
+%define version 7.5.0
 %define occtag %(echo %version | tr . _)
 
 # Enabe this in order to use git snapshiot

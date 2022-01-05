@@ -30,6 +30,8 @@ Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{ve
 %endif
 Patch1:		opencascade-fix_externlib.patch
 Patch2:		opencascade-compile.patch
+# (fedora)
+Patch3:		opencascade-cmake.patch
 # (upstream)
 Patch100:	opencascade-7.5.0-fix_tbb.patch
 BuildRequires:	cmake

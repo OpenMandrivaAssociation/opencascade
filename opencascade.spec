@@ -16,7 +16,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	%{version}
-Release:	2
+Release:	3
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce

@@ -16,7 +16,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	%{version}
-Release:	3
+Release:	2
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce
@@ -133,7 +133,7 @@ edition to heavy industry.
 %files		-n %{devname}
 %{_includedir}/%{name}
 %{_libdir}/lib*.so
-%{_libdir}/cmake/%{name}
+%{_libdir}/cmake/%{name}/*.cmake
 
 #-----------------------------------------------------------------------
 
@@ -145,7 +145,6 @@ edition to heavy industry.
 %endif
 
 %build
-export DESTDIR="%{buildroot}"
 # FIXME as of 7.5.0, clang 13.0.0, fails to build with clang
 export CC=gcc
 export CXX=g++
@@ -167,8 +166,8 @@ export CXX=g++
 ninja install -C build
 
 # adjust environment/directories to avoid (too much) script patching
-ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
-ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
-ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
-ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
+#ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
+#ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
+#ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
+#ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
 

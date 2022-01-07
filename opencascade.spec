@@ -165,6 +165,10 @@ export CXX=g++
 %install
 ninja install -C build
 
+# Draw binary should not be versioned.
+mv %{buildroot}%{_bindir}/DRAWEXE-%{version} \
+   %{buildroot}%{_bindir}/DRAWEXE
+ 
 # adjust environment/directories to avoid (too much) script patching
 #ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
 #ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc

@@ -16,8 +16,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	%{version}
-Release:	5
-Epoch:		1
+Release:	6
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2 with exceptions
 URL:		https://github.com/tpaviot/oce
@@ -33,6 +32,7 @@ Patch1:		opencascade-fix_externlib.patch
 Patch2:		opencascade-compile.patch
 # (fedora)
 Patch3:		opencascade-cmake.patch
+Patch4:		oce-7.5.0-clang.patch
 # (upstream)
 Patch100:	opencascade-7.5.0-fix_tbb.patch
 BuildRequires:	cmake

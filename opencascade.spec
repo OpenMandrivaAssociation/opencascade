@@ -1,11 +1,10 @@
-%define major	7
+%define major	%(echo %{version} |cut -d. -f1)
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
 
-%define version 7.5.0
 %define occtag %(echo %version | tr . _)
 
-# Enabe this in order to use git snapshiot
+# Enabe this in order to use git snapshot
 %define _from_git 0
 
 %if %_from_git
@@ -15,22 +14,25 @@
 
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	%{version}
-Release:	6
+Version:	7.6.0
+Release:	1
 Summary:	3D modeling & numerical simulation
-License:	LGPLv2 with exceptions
-URL:		https://github.com/tpaviot/oce
+License:	LGPLv2.1 with exceptions
+# Also look at
+# https://github.com/tpaviot/oce
+# for a Community Edition -- but as of
+# 7.6.0, it has fallen too far behind
+# upstream to still be useful
+URL:		https://opencascade.org/
 %if %_from_git
 # Source cannot be downloaded directly from git so download from from an address like the following:
 # https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit};sf=tgz
 # then rename as %{name}-%{version}.tgz
-Source0:	%{name}-%{version}.tgz
+Source0:	http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=80ffc5f84dae96de6ed093d3e5d2466a9e368b27;sf=tgz#/opencascade-%{version}.tar.gz
 %else
-Source0:	https://github.com/tpaviot/oce/archive/upstream/V%{occtag}/%{name}-%{version}.tar.gz
+Source0:	https://dev.opencascade.org/system/files/occt/OCC_%{version}_release/opencascade-%{version}.tgz
 %endif
-Patch1:		opencascade-fix_externlib.patch
-Patch2:		opencascade-compile.patch
-# (fedora)
+Patch2:		opencascade-7.6.0-set-env-correctly.patch
 Patch3:		opencascade-cmake.patch
 Patch4:		oce-7.5.0-clang.patch
 # (upstream)
@@ -62,7 +64,6 @@ BuildRequires:	pkgconfig(tk)
 BuildRequires:  pkgconfig(tbb)
 BuildRequires:  pkgconfig(xi)
 
-Requires:	pdksh
 Requires:	tcl
 Requires:	tix
 Requires:	tk
@@ -141,7 +142,7 @@ edition to heavy industry.
 %if %_from_git
 %autosetup -p1 -n occt-%{shortcommit}
 %else
-%autosetup -p1 -n oce-upstream-V%{occtag}
+%autosetup -p1
 %endif
 
 %build
@@ -168,10 +169,11 @@ ninja install -C build
 # Draw binary should not be versioned.
 mv %{buildroot}%{_bindir}/DRAWEXE-%{version} \
    %{buildroot}%{_bindir}/DRAWEXE
- 
-# adjust environment/directories to avoid (too much) script patching
-#ln -sf %{_libdir} %{buildroot}%{_datadir}/%{name}/lib
-#ln -sf %{_includedir}/%{name} %{buildroot}%{_datadir}/%{name}/inc
-#ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/lin
-#ln -sf %{_datadir}/%{name} %{buildroot}%{_datadir}/%{name}/Linux
 
+# Remove buildroot references from the launcher script
+sed -i -e 's,%{buildroot},,g' %{buildroot}%{_bindir}/env.sh
+
+# And ignore release/debug/... build identifier, that's a Windoze thing
+sed -i -e 's,\[ "$1" == "i" \],true,g' %{buildroot}%{_bindir}/custom_*.sh
+cd %{buildroot}%{_bindir}
+[ -e custom.sh ] || ln -s custom_*.sh custom.sh

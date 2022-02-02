@@ -16,6 +16,7 @@ Name:		opencascade
 Group:		Sciences/Physics
 Version:	7.6.0
 Release:	1
+Epoch:		1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2.1 with exceptions
 # Also look at

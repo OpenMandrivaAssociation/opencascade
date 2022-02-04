@@ -5,16 +5,16 @@
 %define occtag %(echo %version | tr . _)
 
 # Enabe this in order to use git snapshot
-%define _from_git 0
+%define _from_git 1
 
 %if %_from_git
-%define commit	80ffc5f84dae96de6ed093d3e5d2466a9e368b27
+%define commit	d2abb6d844231cb8f29be6894440874a4700e4a5
 %define shortcommit	%(c=%{commit}; echo ${c:0:7})
 %endif
 
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	7.6.0
+Version:	7.6.1
 Release:	1
 Epoch:		1
 Summary:	3D modeling & numerical simulation
@@ -29,7 +29,7 @@ URL:		https://opencascade.org/
 # Source cannot be downloaded directly from git so download from from an address like the following:
 # https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit};sf=tgz
 # then rename as %{name}-%{version}.tgz
-Source0:	http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=80ffc5f84dae96de6ed093d3e5d2466a9e368b27;sf=tgz#/opencascade-%{version}.tar.gz
+Source0:	http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit};sf=tgz#/opencascade-%{version}.tar.gz
 %else
 Source0:	https://dev.opencascade.org/system/files/occt/OCC_%{version}_release/opencascade-%{version}.tgz
 %endif

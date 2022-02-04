@@ -28,7 +28,7 @@ URL:		https://opencascade.org/
 # Source cannot be downloaded directly from git so download from from an address like the following:
 # https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit};sf=tgz
 # then rename as %{name}-%{version}.tgz
-Source0:	http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=80ffc5f84dae96de6ed093d3e5d2466a9e368b27;sf=tgz#/opencascade-%{version}.tar.gz
+Source0:	http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit};sf=tgz#/opencascade-%{version}.tar.gz
 %else
 Source0:	https://dev.opencascade.org/system/files/occt/OCC_%{version}_release/opencascade-%{version}.tgz
 %endif

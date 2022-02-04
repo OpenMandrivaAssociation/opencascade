@@ -5,16 +5,16 @@
 %define occtag %(echo %version | tr . _)
 
 # Enabe this in order to use git snapshot
-%define _from_git 0
+%define _from_git 1
 
 %if %_from_git
-%define commit	80ffc5f84dae96de6ed093d3e5d2466a9e368b27
+%define commit	d2abb6d844231cb8f29be6894440874a4700e4a5
 %define shortcommit	%(c=%{commit}; echo ${c:0:7})
 %endif
 
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	7.6.0
+Version:	7.6.1
 Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2.1 with exceptions

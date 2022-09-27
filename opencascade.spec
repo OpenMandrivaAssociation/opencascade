@@ -8,13 +8,22 @@
 %define _from_git 1
 
 %if %_from_git
-%define commit	d2abb6d844231cb8f29be6894440874a4700e4a5
+%define commit	bb368e271e24f63078129283148ce83db6b9670a
 %define shortcommit	%(c=%{commit}; echo ${c:0:7})
 %endif
 
+%bcond_with	draco
+%bcond_without	eigen
+%bcond_without	freeimage
+%bcond_with	fffmpeg
+%bcond_with	openvr
+%bcond_without	rapidjson
+%bcond_without	tbb
+%bcond_without	vtk
+
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	7.6.1
+Version:	7.6.2
 Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2.1 with exceptions
@@ -37,10 +46,12 @@ Patch3:		opencascade-cmake.patch
 Patch4:		oce-7.5.0-clang.patch
 # (upstream)
 Patch100:	opencascade-7.5.0-fix_tbb.patch
+
 BuildRequires:	cmake
 BuildRequires:	doxygen
 BuildRequires: 	ninja
 BuildRequires:	bison
+BuildRequires:  cmake(rapidjson)
 BuildRequires:  cmake(Qt5)
 BuildRequires:  cmake(Qt5Core)
 BuildRequires:  cmake(Qt5Widgets)
@@ -48,7 +59,10 @@ BuildRequires:  cmake(Qt5Quick)
 BuildRequires:  cmake(Qt5Xml)
 BuildRequires:  cmake(Qt5Sql)
 BuildRequires:  cmake(vtk)
+BuildRequires:	eigen-devel
+BuildRequires:	ffmpeg-devel
 BuildRequires:	flex
+BuildRequires:	freeimage-devel
 BuildRequires:	hdf5-devel
 BuildRequires:	mesa-common-devel
 BuildRequires:	pkgconfig(gl)
@@ -149,18 +163,27 @@ edition to heavy industry.
 # FIXME as of 7.5.0, clang 13.0.0, fails to build with clang
 export CC=gcc
 export CXX=g++
+# FIXME: BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF is needed by FreeCAD
+# https://github.com/FreeCAD/FreeCAD/issues/6200
 %cmake \
-	-DCMAKE_VERBOSE_MAKEFILE=OFF \
-	-DUSE_TBB:BOOL=ON \
-	-DUSE_VTK:BOOL=ON \
+	-DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF \
+	-DBUILD_RELEASE_DISABLE_EXCEPTIONS:BOOL=OFF \
+	-DUSE_DRACO:BOOL=%{?with_draco:ON}%{!?with_draco:OFF} \
+	-DUSE_EIGEN:BOOL=%{?with_eigen:ON}%{!?with_eigen:OFF} \
+	-DUSE_FREEIMAGE:BOOL=%{?with_freimage:ON}%{!?with_freeimage:OFF} \
+	-DUSE_FFMPEG:BOOL=%{?with_ffmpeg:ON}%{!?with_ffmpeg:OFF} \
+	-DUSE_OPENVR:BOOL=%{?with_openvr:ON}%{!?with_openvr:OFF} \
+	-DUSE_RAPIDJSON:BOOL=%{?with_rapidjson:ON}%{!?with_rapidjson:OFF} \
+	-DUSE_TBB:BOOL=%{?with_tbb:ON}%{!?with_tbb:OFF} \
+	-DUSE_VTK:BOOL=%{?with_vtk:ON}%{!?with_vtk:OFF} \
 	-DINSTALL_VTK:BOOL=False \
 	-D3RDPARTY_VTK_LIBRARY_DIR:PATH=%{_libdir} \
-	-D3RDPARTY_VTK_INCLUDE_DIR:PATH=%{_includedir} \
-	-D3RDPARTY_VTK_INCLUDE_DIR=%{_includedir}/vtk \
+	-D3RDPARTY_VTK_INCLUDE_DIR:PATH=%{_includedir}/vtk \
 	-DINSTALL_DIR=%{buildroot}%{_prefix} \
 	-DINSTALL_DIR_LIB=%{_lib} \
 	-DINSTALL_DIR_CMAKE=%{_lib}/cmake/%{name} \
 	-G Ninja
+
 %ninja_build
 
 %install

@@ -51,18 +51,28 @@ BuildRequires:	cmake
 BuildRequires:	doxygen
 BuildRequires: 	ninja
 BuildRequires:	bison
+%if %{with rapidjson}
 BuildRequires:  cmake(rapidjson)
+%endif
 BuildRequires:  cmake(Qt5)
 BuildRequires:  cmake(Qt5Core)
 BuildRequires:  cmake(Qt5Widgets)
 BuildRequires:  cmake(Qt5Quick)
 BuildRequires:  cmake(Qt5Xml)
 BuildRequires:  cmake(Qt5Sql)
+%if %{with vtk}
 BuildRequires:  cmake(vtk)
+%endif
+%if %{with eigen}
 BuildRequires:	eigen-devel
+%endif
+%if %{with ffmpeg}
 BuildRequires:	ffmpeg-devel
+%endif
 BuildRequires:	flex
+%if %{with freeimage}
 BuildRequires:	freeimage-devel
+%endif
 BuildRequires:	hdf5-devel
 BuildRequires:	mesa-common-devel
 BuildRequires:	pkgconfig(gl)
@@ -75,7 +85,9 @@ BuildRequires:	pkgconfig(freetype2)
 BuildRequires:	pkgconfig(ftgl)
 BuildRequires:	pkgconfig(tcl)
 BuildRequires:	pkgconfig(tk)
+%if %{with tbb}
 BuildRequires:  pkgconfig(tbb)
+%endif
 BuildRequires:  pkgconfig(xi)
 
 Requires:	tcl

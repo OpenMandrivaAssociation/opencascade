@@ -8,7 +8,7 @@
 %define _from_git 1
 
 %if %_from_git
-%define commit	bb368e271e24f63078129283148ce83db6b9670a
+%define commit b079fb9877ef64d4a8158a60fa157f59b096debb
 %define shortcommit	%(c=%{commit}; echo ${c:0:7})
 %endif
 
@@ -23,7 +23,7 @@
 
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	7.6.2
+Version:	7.6.3
 Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2.1 with exceptions

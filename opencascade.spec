@@ -1,3 +1,5 @@
+#define _disable_ld_no_undefined 1
+
 %define major	%(echo %{version} |cut -d. -f1)
 %define libname	%mklibname %{name} %{major}
 %define devname	%mklibname -d %{name}
@@ -8,22 +10,24 @@
 %define _from_git 1
 
 %if %_from_git
-%define commit b079fb9877ef64d4a8158a60fa157f59b096debb
+%define commit ffce0d66bbaafe3a95984d0e61804c201b9995d2
 %define shortcommit	%(c=%{commit}; echo ${c:0:7})
 %endif
 
 %bcond_with	draco
 %bcond_without	eigen
 %bcond_without	freeimage
+%bcond_without	freetype
 %bcond_with	fffmpeg
 %bcond_with	openvr
 %bcond_without	rapidjson
 %bcond_without	tbb
+%bcond_without	tk
 %bcond_without	vtk
 
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	7.6.3
+Version:	7.7.1
 Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2.1 with exceptions
@@ -44,8 +48,11 @@ Source0:	https://dev.opencascade.org/system/files/occt/OCC_%{version}_release/op
 Patch2:		opencascade-7.6.0-set-env-correctly.patch
 Patch3:		opencascade-cmake.patch
 Patch4:		oce-7.5.0-clang.patch
+Patch5:		opencascade-tbb.patch
 # (upstream)
-Patch100:	opencascade-7.5.0-fix_tbb.patch
+#Patch100:	opencascade-7.5.0-fix_tbb.patch
+# (ROSA)
+Patch101:	opencascade-vtk9.2.patch
 
 BuildRequires:	cmake
 BuildRequires:	doxygen
@@ -80,11 +87,15 @@ BuildRequires:	pkgconfig(glu)
 BuildRequires:	pkgconfig(glew)
 BuildRequires:	pkgconfig(xmu)
 BuildRequires:	pkgconfig(xmuu)
+%if %{with freeimage}
 BuildRequires:	pkgconfig(fontconfig)
 BuildRequires:	pkgconfig(freetype2)
+%endif
 BuildRequires:	pkgconfig(ftgl)
+%if %{with tk}
 BuildRequires:	pkgconfig(tcl)
 BuildRequires:	pkgconfig(tk)
+%endif
 %if %{with tbb}
 BuildRequires:  pkgconfig(tbb)
 %endif
@@ -177,16 +188,18 @@ export CC=gcc
 export CXX=g++
 # FIXME: BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF is needed by FreeCAD
 # https://github.com/FreeCAD/FreeCAD/issues/6200
-%cmake \
+%cmake -Wno-dev \
 	-DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF \
 	-DBUILD_RELEASE_DISABLE_EXCEPTIONS:BOOL=OFF \
 	-DUSE_DRACO:BOOL=%{?with_draco:ON}%{!?with_draco:OFF} \
 	-DUSE_EIGEN:BOOL=%{?with_eigen:ON}%{!?with_eigen:OFF} \
-	-DUSE_FREEIMAGE:BOOL=%{?with_freimage:ON}%{!?with_freeimage:OFF} \
+	-DUSE_FREEIMAGE:BOOL=%{?with_freeimage:ON}%{!?with_freeimage:OFF} \
+	-DUSE_FREETYPE:BOOL=%{?with_freetype:ON}%{!?with_freetype:OFF} \
 	-DUSE_FFMPEG:BOOL=%{?with_ffmpeg:ON}%{!?with_ffmpeg:OFF} \
 	-DUSE_OPENVR:BOOL=%{?with_openvr:ON}%{!?with_openvr:OFF} \
 	-DUSE_RAPIDJSON:BOOL=%{?with_rapidjson:ON}%{!?with_rapidjson:OFF} \
 	-DUSE_TBB:BOOL=%{?with_tbb:ON}%{!?with_tbb:OFF} \
+	-DUSE_TK:BOOL=%{?with_tk:ON}%{!?with_tk:OFF} \
 	-DUSE_VTK:BOOL=%{?with_vtk:ON}%{!?with_vtk:OFF} \
 	-DINSTALL_VTK:BOOL=False \
 	-D3RDPARTY_VTK_LIBRARY_DIR:PATH=%{_libdir} \

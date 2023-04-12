@@ -1,0 +1,47 @@
+diff -ruN a/src/IVtkDraw/IVtkDraw_HighlightAndSelectionPipeline.cxx b/src/IVtkDraw/IVtkDraw_HighlightAndSelectionPipeline.cxx
+--- a/src/IVtkDraw/IVtkDraw_HighlightAndSelectionPipeline.cxx	2022-11-03 04:22:09.000000000 +0900
++++ b/src/IVtkDraw/IVtkDraw_HighlightAndSelectionPipeline.cxx	2023-02-20 16:01:53.753952091 +0900
+@@ -17,6 +17,7 @@
+ 
+ // prevent disabling some MSVC warning messages by VTK headers 
+ #include <Standard_WarningsDisable.hxx>
++#undef AllValues
+ #include <vtkRenderer.h>
+ #include <vtkActor.h>
+ #include <vtkPolyDataMapper.h>
+@@ -25,7 +26,6 @@
+ #include <vtkProperty.h>
+ #include <vtkRenderWindow.h>
+ #include <Standard_WarningsRestore.hxx>
+-
+ #include <IVtkOCC_Shape.hxx>
+ #include <IVtkTools_DisplayModeFilter.hxx>
+ #include <IVtkTools_ShapeDataSource.hxx>
+diff -ruN a/src/IVtkDraw/IVtkDraw_Interactor.cxx b/src/IVtkDraw/IVtkDraw_Interactor.cxx
+--- a/src/IVtkDraw/IVtkDraw_Interactor.cxx	2022-11-03 04:22:09.000000000 +0900
++++ b/src/IVtkDraw/IVtkDraw_Interactor.cxx	2023-02-20 15:59:34.255960859 +0900
+@@ -26,6 +26,13 @@
+ #ifdef AllValues
+ #undef AllValues
+ #endif
++// X11 is included through glx
++#ifdef Status
++#undef Status
++#endif
++#ifdef Success
++#undef Success
++#endif
+ 
+ #include <vtkXRenderWindowInteractor.h>
+ #include <vtkXOpenGLRenderWindow.h>
+diff -ruN a/src/IVtkVTK/IVtkVTK_ShapeData.cxx b/src/IVtkVTK/IVtkVTK_ShapeData.cxx
+--- a/src/IVtkVTK/IVtkVTK_ShapeData.cxx	2022-11-03 04:22:09.000000000 +0900
++++ b/src/IVtkVTK/IVtkVTK_ShapeData.cxx	2023-02-20 16:03:13.125947103 +0900
+@@ -24,6 +24,7 @@
+ #include <vtkPointData.h>
+ #include <vtkPoints.h>
+ #include <vtkPolyData.h>
++#include <vtkVersion.h>
+ #include <Standard_WarningsRestore.hxx>
+ 
+ IMPLEMENT_STANDARD_RTTIEXT(IVtkVTK_ShapeData,IVtk_IShapeData)

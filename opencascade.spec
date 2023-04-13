@@ -79,6 +79,7 @@ BuildRequires:	ffmpeg-devel
 BuildRequires:	flex
 %if %{with freeimage}
 BuildRequires:	freeimage-devel
+BuildRequires:	pkgconfig(libtiff-5)
 %endif
 BuildRequires:	hdf5-devel
 BuildRequires:	mesa-common-devel
@@ -183,6 +184,7 @@ edition to heavy industry.
 %endif
 
 %build
+export LDFLAGS="%ldflags `pkg-config --libs libtiff-5`"
 # FIXME as of 7.5.0, clang 13.0.0, fails to build with clang
 export CC=gcc
 export CXX=g++

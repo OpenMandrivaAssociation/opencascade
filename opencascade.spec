@@ -145,8 +145,7 @@ numerous commercial clients belonging to different domains from software
 edition to heavy industry.
 
 %files		-n %{libname}
-%{_libdir}/lib*.so.%{major}
-%{_libdir}/lib*.so.%{major}.*
+%{_libdir}/lib*.so.%{major}*
 
 #-----------------------------------------------------------------------
 

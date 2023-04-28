@@ -45,6 +45,7 @@ Source0:	http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit
 %else
 Source0:	https://dev.opencascade.org/system/files/occt/OCC_%{version}_release/opencascade-%{version}.tgz
 %endif
+Patch1:		opencascade-compilefixes.patch
 Patch2:		opencascade-7.6.0-set-env-correctly.patch
 Patch3:		opencascade-cmake.patch
 Patch4:		oce-7.5.0-clang.patch
@@ -124,6 +125,7 @@ edition to heavy industry.
 %{_datadir}/%{name}
 %{_bindir}/*.sh
 %{_bindir}/DRAW*
+%{_bindir}/ExpToCasExe*
 
 #-----------------------------------------------------------------------
 
@@ -184,12 +186,13 @@ edition to heavy industry.
 
 %build
 export LDFLAGS="%ldflags `pkg-config --libs libtiff-4`"
-# FIXME as of 7.5.0, clang 13.0.0, fails to build with clang
+# FIXME as of 7.7.1, clang 16.0.2, fails to build with clang
 export CC=gcc
 export CXX=g++
 # FIXME: BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF is needed by FreeCAD
 # https://github.com/FreeCAD/FreeCAD/issues/6200
 %cmake -Wno-dev \
+	-DBUILD_CPP_STANDARD=C++20 \
 	-DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF \
 	-DBUILD_RELEASE_DISABLE_EXCEPTIONS:BOOL=OFF \
 	-DUSE_DRACO:BOOL=%{?with_draco:ON}%{!?with_draco:OFF} \

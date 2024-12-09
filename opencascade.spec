@@ -1,3 +1,7 @@
+# For now -- since C code (built with clang) and
+# Fortran code (built with gfortran) are linked
+# together, LTO object files don't work
+%global _disable_lto 0
 #define _disable_ld_no_undefined 1
 
 %define major	%(echo %{version} |cut -d. -f1)
@@ -10,7 +14,7 @@
 %define _from_git 1
 
 %if %_from_git
-%define commit cec1ecd0c9f3b3d2572c47035d11949e8dfa85e2
+%define commit bd2a789f15235755ce4d1a3b07379a2e062fdc2e
 %define shortcommit	%(c=%{commit}; echo ${c:0:7})
 %endif
 
@@ -27,7 +31,7 @@
 
 Name:		opencascade
 Group:		Sciences/Physics
-Version:	7.7.2
+Version:	7.8.1
 Release:	1
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2.1 with exceptions
@@ -45,11 +49,12 @@ Source0:	http://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=%{commit
 %else
 Source0:	https://dev.opencascade.org/system/files/occt/OCC_%{version}_release/opencascade-%{version}.tgz
 %endif
-Patch1:		opencascade-compilefixes.patch
+#Patch1:		opencascade-compilefixes.patch
 Patch2:		opencascade-7.6.0-set-env-correctly.patch
 Patch3:		opencascade-cmake.patch
 Patch4:		oce-7.5.0-clang.patch
 Patch5:		opencascade-tbb.patch
+Patch6:		opencascade-7.8.1-cast.patch 
 # (upstream)
 #Patch100:	opencascade-7.5.0-fix_tbb.patch
 # (ROSA)
@@ -62,12 +67,12 @@ BuildRequires:	bison
 %if %{with rapidjson}
 BuildRequires:  cmake(rapidjson)
 %endif
-BuildRequires:  cmake(Qt5)
-BuildRequires:  cmake(Qt5Core)
-BuildRequires:  cmake(Qt5Widgets)
-BuildRequires:  cmake(Qt5Quick)
-BuildRequires:  cmake(Qt5Xml)
-BuildRequires:  cmake(Qt5Sql)
+BuildRequires:  cmake(Qt6)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6Xml)
+BuildRequires:  cmake(Qt6Sql)
 %if %{with vtk}
 BuildRequires:  cmake(vtk)
 %endif
@@ -187,8 +192,8 @@ edition to heavy industry.
 %build
 export LDFLAGS="%ldflags `pkg-config --libs libtiff-4`"
 # FIXME as of 7.7.1, clang 16.0.2, fails to build with clang
-export CC=gcc
-export CXX=g++
+#export CC=gcc
+#export CXX=g++
 # FIXME: BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF is needed by FreeCAD
 # https://github.com/FreeCAD/FreeCAD/issues/6200
 %cmake -Wno-dev \

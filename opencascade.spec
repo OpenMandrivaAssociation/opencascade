@@ -69,10 +69,12 @@ BuildRequires:  cmake(rapidjson)
 %endif
 BuildRequires:  cmake(Qt6)
 BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:	cmake(Qt6OpenGL)
+BuildRequires:	cmake(Qt6OpenGL)
 BuildRequires:  cmake(Qt6Quick)
-BuildRequires:  cmake(Qt6Xml)
 BuildRequires:  cmake(Qt6Sql)
+BuildRequires:  cmake(Qt6Xml)
+BuildRequires:  cmake(Qt6Widgets)
 %if %{with vtk}
 BuildRequires:  cmake(vtk)
 %endif

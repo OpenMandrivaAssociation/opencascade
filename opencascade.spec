@@ -32,7 +32,7 @@
 Name:		opencascade
 Group:		Sciences/Physics
 Version:	7.8.1
-Release:	1
+Release:	2
 Summary:	3D modeling & numerical simulation
 License:	LGPLv2.1 with exceptions
 # Also look at
